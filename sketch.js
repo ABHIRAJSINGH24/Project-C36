@@ -11,8 +11,10 @@ var bird, slingshot;
 var gameState = "onSling";
 var bg = "sprites/bg1.png";
 
+var score = 0;
 
 function preload() {
+    backgroundImg = loadImage("sprites/bg.png");
     getTime();
 }
 
@@ -74,10 +76,16 @@ function draw(){
     platform.display();
    
     slingshot.display();    
+
+    textSize(40);
+    fill("blue");
+    text("Score:"+score,width-200,height-300);
 }
 
 function mouseDragged(){
-    Matter.Body.setPosition(bird.body, {x: mouseX , y: mouseY});
+    if(slingshot.sling.bodyA===bird.body){
+        Matter.Body.setPosition(bird.body, {x: mouseX , y: mouseY});
+    }
 }
 
 
@@ -85,10 +93,11 @@ function mouseReleased(){
     slingshot.fly();
 }
 function keyPressed(){
-    if(keyCode===32)
+    if(keyCode===32 && bird.body.speed<1){
     bird.trajectory=[];
     Matter.Body.setPosition(bird.body,{x:200,y:50});
     slingshot.attach(bird.body);
+    }
 }
 
 async function getTime(){
